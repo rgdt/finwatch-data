@@ -1,0 +1,44 @@
+name: universe
+
+# Reconstruit les listes de tickers surveillés à partir des tables d'indices
+# de Wikipédia. Une fois par semaine suffit : la composition des indices bouge
+# peu, et le script conserve la liste existante si la reconstruction échoue.
+
+on:
+  schedule:
+    - cron: '0 6 * * 0'   # dimanche, 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  universe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Installer les dépendances
+        run: pip install --quiet pandas lxml html5lib
+
+      - name: Reconstruire l'univers
+        run: python scripts/build_universe.py eu us
+
+      - name: Publier
+        run: |
+          git config user.name  'watchtower-bot'
+          git config user.email 'watchtower-bot@users.noreply.github.com'
+          git add universe/
+          if git diff --cached --quiet; then
+            echo "univers inchangé"
+            exit 0
+          fi
+          git commit -m "univers $(date -u '+%Y-%m-%d')"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
