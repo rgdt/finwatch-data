@@ -16,11 +16,23 @@ suffit largement.
 
 from __future__ import annotations
 
+import io
 import re
 import sys
+import time
 from pathlib import Path
+from urllib.request import Request, urlopen
 
 import pandas as pd
+
+# Wikipédia renvoie 403 aux clients qui ne s'identifient pas. Sa politique
+# demande un agent utilisateur descriptif avec un moyen de contact — sans quoi
+# pandas.read_html échoue en 403 sur un runner.
+USER_AGENT = (
+    "finwatch-data/1.0 (https://github.com/rgdt/finwatch-data) "
+    "python-urllib"
+)
+FETCH_RETRIES = 3
 
 ROOT = Path(__file__).resolve().parent.parent
 UNIVERSE_DIR = ROOT / "universe"
@@ -93,11 +105,33 @@ def clean(raw: object, suffix: str) -> str | None:
     return sym if VALID.match(sym) else None
 
 
+def fetch_html(url: str) -> str:
+    """Récupère une page en s'identifiant correctement, avec reprise."""
+    delay = 3
+    for attempt in range(1, FETCH_RETRIES + 1):
+        try:
+            request = Request(url, headers={
+                "User-Agent": USER_AGENT,
+                "Accept": "text/html,application/xhtml+xml",
+                "Accept-Language": "fr,en;q=0.8",
+            })
+            with urlopen(request, timeout=30) as response:
+                return response.read().decode("utf-8", errors="replace")
+        except Exception:
+            if attempt == FETCH_RETRIES:
+                raise
+            time.sleep(delay)
+            delay *= 2
+    return ""
+
+
 def harvest(name: str, url: str, suffix: str) -> set[str]:
     """Extrait les tickers d'une page d'indice. Ne lève jamais."""
     try:
-        tables = pd.read_html(url)
-    except Exception as exc:  # réseau, page modifiée, table absente
+        # read_html reçoit le HTML déjà téléchargé, pas l'URL : c'est ce qui
+        # permet de maîtriser les en-têtes de la requête.
+        tables = pd.read_html(io.StringIO(fetch_html(url)))
+    except Exception as exc:  # réseau, 403, page modifiée, table absente
         print(f"  ! {name}: lecture impossible ({exc.__class__.__name__}: {exc})",
               file=sys.stderr)
         return set()
@@ -126,7 +160,9 @@ def harvest(name: str, url: str, suffix: str) -> set[str]:
 def build(region: str) -> None:
     print(f"[{region.upper()}] construction de l'univers")
     tickers: set[str] = set()
-    for name, url, suffix in SOURCES[region]:
+    for i, (name, url, suffix) in enumerate(SOURCES[region]):
+        if i:
+            time.sleep(1)  # courtoisie vis-à-vis de Wikipédia
         tickers |= harvest(name, url, suffix)
 
     target = UNIVERSE_DIR / f"{region}.txt"

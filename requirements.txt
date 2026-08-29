@@ -1,0 +1,7 @@
+# yfinance suit les changements de Yahoo : le laisser flottant est délibéré,
+# une version figée casse le jour où Yahoo bouge.
+yfinance>=0.2.40
+pandas>=2.2
+numpy>=1.26
+lxml>=5.0
+html5lib>=1.1

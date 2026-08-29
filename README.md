@@ -14,7 +14,7 @@ Instantanés de marché produits par GitHub Actions.
 ## Usage
 
 ```bash
-pip install yfinance pandas numpy lxml html5lib
+pip install -r requirements.txt
 python scripts/build_universe.py eu us
 python scripts/fetch_snapshot.py eu
 ```
