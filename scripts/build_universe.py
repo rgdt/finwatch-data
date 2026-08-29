@@ -17,9 +17,11 @@ suffit largement.
 from __future__ import annotations
 
 import io
+import json
 import re
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -42,6 +44,11 @@ UNIVERSE_DIR = ROOT / "universe"
 SOURCES = {
     "eu": [
         ("CAC 40", "https://en.wikipedia.org/wiki/CAC_40", ".PA"),
+        # Le SBF 120 se reconstitue par CAC 40 + Next 20 + Mid 60. La page
+        # française du SBF 120 est conservée en complément, mais elle n'a rien
+        # rendu au premier passage — les pages anglaises sont mieux structurées.
+        ("CAC Next 20", "https://en.wikipedia.org/wiki/CAC_Next_20", ".PA"),
+        ("CAC Mid 60", "https://en.wikipedia.org/wiki/CAC_Mid_60", ".PA"),
         ("SBF 120", "https://fr.wikipedia.org/wiki/SBF_120", ".PA"),
         ("DAX", "https://en.wikipedia.org/wiki/DAX", ".DE"),
         ("MDAX", "https://en.wikipedia.org/wiki/MDAX", ".DE"),
@@ -160,10 +167,32 @@ def harvest(name: str, url: str, suffix: str) -> set[str]:
 def build(region: str) -> None:
     print(f"[{region.upper()}] construction de l'univers")
     tickers: set[str] = set()
+    per_source: dict[str, int] = {}
+
     for i, (name, url, suffix) in enumerate(SOURCES[region]):
         if i:
             time.sleep(1)  # courtoisie vis-à-vis de Wikipédia
-        tickers |= harvest(name, url, suffix)
+        found = harvest(name, url, suffix)
+        per_source[name] = len(found)
+        tickers |= found
+
+    # Compte rendu par source, versionné avec l'univers : sans lui, une source
+    # qui cesse silencieusement de rendre quoi que ce soit passe inaperçue —
+    # l'univers reste au-dessus du seuil et rien ne signale le trou.
+    report = {
+        "region": region,
+        "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "total_unique": len(tickers),
+        "per_source": per_source,
+        "empty_sources": sorted(n for n, c in per_source.items() if c == 0),
+    }
+    UNIVERSE_DIR.mkdir(parents=True, exist_ok=True)
+    (UNIVERSE_DIR / f"report-{region}.json").write_text(
+        json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    if report["empty_sources"]:
+        print(f"[{region.upper()}] ⚠ sources muettes : "
+              f"{', '.join(report['empty_sources'])}", file=sys.stderr)
 
     target = UNIVERSE_DIR / f"{region}.txt"
     minimum = MIN_EXPECTED[region]

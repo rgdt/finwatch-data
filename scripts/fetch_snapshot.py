@@ -51,6 +51,10 @@ SERIES_DAYS = 90
 # lecture technique ait un sens, même sur des positions de 50 €.
 MIN_AVG_VALUE_EUR = 250_000  # volume moyen 20j × cours, en euros
 
+# Poids du volume relatif dans le score d'activité. À 1,0 le volume et la
+# performance pèsent pareil ; au-dessus, l'anomalie de volume prime.
+VOLUME_EXPONENT = 1.5
+
 BATCH_SIZE = 120          # tickers par appel yfinance
 DOWNLOAD_RETRIES = 3
 RETRY_BACKOFF = 20        # secondes, doublé à chaque échec
@@ -140,7 +144,11 @@ def download(tickers: list[str]) -> dict[str, pd.DataFrame]:
                 df = raw[ticker] if len(batch) > 1 else raw
             except KeyError:
                 continue
-            df = df.dropna(how="all")
+            # Yahoo renvoie souvent une barre du jour incomplète : cours de
+            # clôture ou extrêmes à NaN, volume à zéro. Elle fausse l'ATR (une
+            # seule valeur manquante suffit à annuler une moyenne mobile) et
+            # le volume relatif. On ne garde que les séances complètes.
+            df = df.dropna(subset=["Close", "High", "Low"])
             if len(df) >= 60:  # trop court pour des moyennes exploitables
                 frames[ticker] = df
 
@@ -241,8 +249,16 @@ def measure(ticker: str, df: pd.DataFrame, fx: dict[str, float],
     # Un titre "actif" bouge ET s'échange anormalement. Le score est non signé :
     # il fait remonter les mouvements dans les deux sens, la direction étant
     # portée par les rendements eux-mêmes.
+    #
+    # L'exposant sur le volume est ce qui empêche le score de n'être qu'une
+    # mesure de momentum déguisée : avec log1p, l'écart entre un volume de 0,8
+    # et un volume de 2,2 se tassait à un facteur 2, contre 4 pour l'écart de
+    # performance — le volume ne pesait presque rien. Élevé à la puissance 1,5,
+    # il retrouve une amplitude comparable, et un titre qui monte sur un volume
+    # inférieur à sa moyenne est pénalisé au lieu d'être simplement peu
+    # récompensé.
     momentum = abs(ret_5d) if not pd.isna(ret_5d) else 0.0
-    activity = momentum * math.log1p(max(rel_volume, 0.01))
+    activity = momentum * max(rel_volume, 0.05) ** VOLUME_EXPONENT
 
     max_shares = int(MAX_POSITION_EUR // price_eur)
 
