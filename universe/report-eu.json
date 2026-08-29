@@ -1,0 +1,24 @@
+{
+ "region": "eu",
+ "built_at": "2026-08-29T08:45:57+00:00",
+ "total_unique": 248,
+ "per_source": {
+  "CAC 40": 40,
+  "CAC Next 20": 0,
+  "CAC Mid 60": 0,
+  "SBF 120": 0,
+  "DAX": 40,
+  "MDAX": 50,
+  "SDAX": 0,
+  "AEX": 25,
+  "BEL 20": 21,
+  "IBEX 35": 35,
+  "FTSE MIB": 40
+ },
+ "empty_sources": [
+  "CAC Mid 60",
+  "CAC Next 20",
+  "SBF 120",
+  "SDAX"
+ ]
+}
