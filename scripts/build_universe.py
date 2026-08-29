@@ -41,22 +41,29 @@ UNIVERSE_DIR = ROOT / "universe"
 
 # Un ticker Yahoo se compose du symbole local et d'un suffixe de place.
 # `suffix` vaut "" pour les places américaines (pas de suffixe chez Yahoo).
+# Sources écartées après vérification page par page — Wikipédia ne porte pas de
+# tickers pour celles-ci, inutile de les réinterroger :
+#   SBF 120 (fr)     liste de liens, aucun tableau
+#   CAC Next 20      pas de tableau de composition, renvoi vers Euronext
+#   CAC Mid 60       idem, renvoi vers boursier.com
+#   SDAX (en et de)  tableau sans colonne de ticker (logo, nom, branche)
+#   PSI-20           tableau sans colonne de ticker
+# Conséquence assumée : les mid-caps françaises et allemandes hors MDAX ne sont
+# pas couvertes. Il faudrait une autre source de composition pour y remédier.
+
 SOURCES = {
     "eu": [
         ("CAC 40", "https://en.wikipedia.org/wiki/CAC_40", ".PA"),
-        # Le SBF 120 se reconstitue par CAC 40 + Next 20 + Mid 60. La page
-        # française du SBF 120 est conservée en complément, mais elle n'a rien
-        # rendu au premier passage — les pages anglaises sont mieux structurées.
-        ("CAC Next 20", "https://en.wikipedia.org/wiki/CAC_Next_20", ".PA"),
-        ("CAC Mid 60", "https://en.wikipedia.org/wiki/CAC_Mid_60", ".PA"),
-        ("SBF 120", "https://fr.wikipedia.org/wiki/SBF_120", ".PA"),
         ("DAX", "https://en.wikipedia.org/wiki/DAX", ".DE"),
         ("MDAX", "https://en.wikipedia.org/wiki/MDAX", ".DE"),
-        ("SDAX", "https://en.wikipedia.org/wiki/SDAX", ".DE"),
         ("AEX", "https://en.wikipedia.org/wiki/AEX_index", ".AS"),
         ("BEL 20", "https://en.wikipedia.org/wiki/BEL20", ".BR"),
         ("IBEX 35", "https://en.wikipedia.org/wiki/IBEX_35", ".MC"),
         ("FTSE MIB", "https://en.wikipedia.org/wiki/FTSE_MIB", ".MI"),
+        # Vérifiées : colonne « Ticker » présente, tickers déjà suffixés pour
+        # Stockholm — clean() sait les reconnaître.
+        ("SMI", "https://en.wikipedia.org/wiki/Swiss_Market_Index", ".SW"),
+        ("OMX Stockholm 30", "https://en.wikipedia.org/wiki/OMX_Stockholm_30", ".ST"),
     ],
     "us": [
         ("S&P 500", "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies", ""),
@@ -132,18 +139,25 @@ def fetch_html(url: str) -> str:
     return ""
 
 
-def harvest(name: str, url: str, suffix: str) -> set[str]:
-    """Extrait les tickers d'une page d'indice. Ne lève jamais."""
+def harvest(name: str, url: str, suffix: str) -> tuple[set[str], str]:
+    """Extrait les tickers d'une page d'indice. Ne lève jamais.
+
+    Retourne les tickers et un motif. Le motif est ce qui distingue « la page
+    a changé de structure » de « la requête a échoué » — un simple compte à
+    zéro ne dit pas laquelle des deux s'est produite, et les deux se réparent
+    différemment.
+    """
     try:
         # read_html reçoit le HTML déjà téléchargé, pas l'URL : c'est ce qui
         # permet de maîtriser les en-têtes de la requête.
         tables = pd.read_html(io.StringIO(fetch_html(url)))
     except Exception as exc:  # réseau, 403, page modifiée, table absente
-        print(f"  ! {name}: lecture impossible ({exc.__class__.__name__}: {exc})",
-              file=sys.stderr)
-        return set()
+        reason = f"lecture impossible ({exc.__class__.__name__}: {exc})"
+        print(f"  ! {name}: {reason}", file=sys.stderr)
+        return set(), reason
 
     found: set[str] = set()
+    saw_column = False
     for table in tables:
         # Aplatit les en-têtes multi-niveaux
         if isinstance(table.columns, pd.MultiIndex):
@@ -152,6 +166,7 @@ def harvest(name: str, url: str, suffix: str) -> set[str]:
         column = pick_ticker_column(table)
         if column is None:
             continue
+        saw_column = True
         for cell in column:
             ticker = clean(cell, suffix)
             if ticker:
@@ -160,39 +175,66 @@ def harvest(name: str, url: str, suffix: str) -> set[str]:
         if len(found) >= 15:
             break
 
-    print(f"  · {name}: {len(found)} tickers")
-    return found
+    if found:
+        reason = "ok"
+    elif saw_column:
+        reason = "colonne trouvée mais aucun ticker exploitable"
+    else:
+        reason = f"aucune colonne de ticker dans les {len(tables)} tableaux"
+
+    print(f"  · {name}: {len(found)} tickers" + ("" if found else f" — {reason}"))
+    return found, reason
 
 
 def build(region: str) -> None:
     print(f"[{region.upper()}] construction de l'univers")
+    report_path = UNIVERSE_DIR / f"report-{region}.json"
+    previous = {}
+    if report_path.exists():
+        try:
+            previous = json.loads(report_path.read_text(encoding="utf-8"))
+        except Exception:
+            previous = {}
+    previous_counts = {k: v.get("count", 0) if isinstance(v, dict) else v
+                       for k, v in (previous.get("per_source") or {}).items()}
+
     tickers: set[str] = set()
-    per_source: dict[str, int] = {}
+    per_source: dict[str, dict] = {}
+    regressions: list[str] = []
 
     for i, (name, url, suffix) in enumerate(SOURCES[region]):
         if i:
             time.sleep(1)  # courtoisie vis-à-vis de Wikipédia
-        found = harvest(name, url, suffix)
-        per_source[name] = len(found)
+        found, reason = harvest(name, url, suffix)
+        per_source[name] = {"count": len(found), "reason": reason}
         tickers |= found
 
-    # Compte rendu par source, versionné avec l'univers : sans lui, une source
-    # qui cesse silencieusement de rendre quoi que ce soit passe inaperçue —
-    # l'univers reste au-dessus du seuil et rien ne signale le trou.
+        # Une source qui s'effondre sans disparaître est le cas vicieux : le
+        # total reste au-dessus du seuil et rien ne se voit. On compare donc
+        # chaque source à son propre passage précédent.
+        before = previous_counts.get(name)
+        if before and len(found) < before * 0.5:
+            regressions.append(f"{name} {before} → {len(found)}")
+
+    # Compte rendu par source, versionné avec l'univers.
     report = {
         "region": region,
         "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "total_unique": len(tickers),
         "per_source": per_source,
-        "empty_sources": sorted(n for n, c in per_source.items() if c == 0),
+        "empty_sources": sorted(n for n, d in per_source.items() if not d["count"]),
+        "regressions": regressions,
     }
     UNIVERSE_DIR.mkdir(parents=True, exist_ok=True)
-    (UNIVERSE_DIR / f"report-{region}.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                           encoding="utf-8")
 
     if report["empty_sources"]:
         print(f"[{region.upper()}] ⚠ sources muettes : "
               f"{', '.join(report['empty_sources'])}", file=sys.stderr)
+    if regressions:
+        print(f"[{region.upper()}] ⚠ sources en recul : "
+              f"{'; '.join(regressions)}", file=sys.stderr)
 
     target = UNIVERSE_DIR / f"{region}.txt"
     minimum = MIN_EXPECTED[region]

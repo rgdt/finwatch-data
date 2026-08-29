@@ -1,0 +1,1063 @@
+<title>Maquette du brief EU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Financial Watchtower — laiton & ardoise
+   Palette validée : contraste, plage de clarté, chroma, CVD.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* Fonds et encres — gris ardoise, biais bleu */
+  --bg:        #E7EAEC;
+  --surface:   #F6F8F9;
+  --surface-2: #EDF0F2;
+  --ink:       #14181B;
+  --ink-2:     #47525A;
+  --ink-3:     #78838A;
+  --rule:      #D3D9DD;
+  --rule-2:    #C0C8CE;
+
+  /* Accent structurel : laiton. Jamais utilisé comme couleur de donnée. */
+  --brass:     #8A6412;
+  --brass-dim: #B79246;
+
+  /* Couleurs sémantiques — direction de marché */
+  --up:        #008874;
+  --down:      #C64A20;
+  --watch:     #3457C0;
+  --up-wash:    rgba(0, 136, 116, 0.12);
+  --down-wash:  rgba(198, 74, 32, 0.12);
+  --watch-wash: rgba(52, 87, 192, 0.12);
+
+  --shadow: 0 1px 2px rgba(20, 24, 27, .05), 0 6px 18px -10px rgba(20, 24, 27, .18);
+
+  --step--1: 0.8125rem;
+  --step-0:  0.9375rem;
+  --step-1:  1.125rem;
+  --step-2:  1.5rem;
+  --step-3:  2.125rem;
+  --step-4:  3rem;
+
+  --sans: "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Newsreader", ui-serif, Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:        #14181B;
+    --surface:   #1C2126;
+    --surface-2: #232A30;
+    --ink:       #E6EBEE;
+    --ink-2:     #A3AEB6;
+    --ink-3:     #6F7A82;
+    --rule:      #2B333A;
+    --rule-2:    #3A444C;
+
+    --brass:     #D9A648;
+    --brass-dim: #9A7833;
+
+    --up:        #2CA692;
+    --down:      #D9603F;
+    --watch:     #7B93EA;
+    --up-wash:    rgba(44, 166, 146, 0.15);
+    --down-wash:  rgba(217, 96, 63, 0.15);
+    --watch-wash: rgba(123, 147, 234, 0.15);
+
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg:        #14181B;
+  --surface:   #1C2126;
+  --surface-2: #232A30;
+  --ink:       #E6EBEE;
+  --ink-2:     #A3AEB6;
+  --ink-3:     #6F7A82;
+  --rule:      #2B333A;
+  --rule-2:    #3A444C;
+
+  --brass:     #D9A648;
+  --brass-dim: #9A7833;
+
+  --up:        #2CA692;
+  --down:      #D9603F;
+  --watch:     #7B93EA;
+  --up-wash:    rgba(44, 166, 146, 0.15);
+  --down-wash:  rgba(217, 96, 63, 0.15);
+  --watch-wash: rgba(123, 147, 234, 0.15);
+
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2.5rem) 5rem;
+}
+
+/* ── Bandeau maquette ───────────────────────────────────────── */
+
+.mock {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin: 1.25rem 0 0;
+  padding: .7rem 1rem;
+  border: 1px solid var(--brass);
+  border-left-width: 4px;
+  background: color-mix(in srgb, var(--brass) 9%, var(--surface));
+  font-size: var(--step--1);
+}
+.mock strong {
+  font-family: var(--mono);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: .75rem;
+  color: var(--brass);
+}
+.mock span { color: var(--ink-2); }
+
+/* ── En-tête ────────────────────────────────────────────────── */
+
+header { padding-top: 2.5rem; }
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  font-family: var(--mono);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.wordmark::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--brass), transparent 85%);
+}
+
+h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.25rem, 6vw, var(--step-4));
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin: .6rem 0 0;
+}
+h1 em {
+  font-style: italic;
+  color: var(--ink-2);
+  font-weight: 400;
+}
+
+.dateline {
+  font-family: var(--mono);
+  font-size: var(--step--1);
+  color: var(--ink-2);
+  margin-top: .5rem;
+}
+
+.rail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  margin-top: 1.75rem;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.rail div { background: var(--surface); padding: .85rem 1rem; }
+.rail dt {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.rail dd {
+  margin: .3rem 0 0;
+  font-size: var(--step-1);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.rail dd small {
+  font-size: var(--step--1);
+  font-weight: 400;
+  color: var(--ink-2);
+}
+
+/* ── Sections ───────────────────────────────────────────────── */
+
+section { margin-top: 3.5rem; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: var(--step-3);
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: .35rem 0 0;
+  text-wrap: balance;
+}
+
+.lede {
+  color: var(--ink-2);
+  max-width: 62ch;
+  margin: .5rem 0 0;
+}
+
+/* ── Actualité ──────────────────────────────────────────────── */
+
+.news { list-style: none; margin: 1.75rem 0 0; padding: 0; }
+.news li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0 1.25rem;
+  padding: 1.15rem 0;
+  border-top: 1px solid var(--rule);
+}
+.news li:last-child { border-bottom: 1px solid var(--rule); }
+.news time {
+  font-family: var(--mono);
+  font-size: .78rem;
+  color: var(--ink-3);
+  padding-top: .2rem;
+  font-variant-numeric: tabular-nums;
+}
+.news h3 {
+  font-family: var(--serif);
+  font-size: var(--step-2);
+  font-weight: 500;
+  line-height: 1.25;
+  margin: 0;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+.news p { margin: .4rem 0 0; color: var(--ink-2); max-width: 68ch; }
+.news .src {
+  grid-column: 2;
+  margin-top: .55rem;
+  font-family: var(--mono);
+  font-size: .74rem;
+}
+.news .src a { color: var(--brass); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.news .src a:hover { color: var(--ink); }
+
+/* ── Carte du jour (nuage de points) ────────────────────────── */
+
+.figure {
+  margin-top: 1.75rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 1.5rem 1.25rem 1rem;
+  box-shadow: var(--shadow);
+}
+.figure figcaption {
+  font-size: var(--step--1);
+  color: var(--ink-2);
+  margin-bottom: 1rem;
+  max-width: 68ch;
+}
+.figure .fig-title {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: var(--step-0);
+  color: var(--ink);
+  margin-bottom: .2rem;
+}
+.scatter-holder { overflow-x: auto; }
+
+/* ── Légende horizons ───────────────────────────────────────── */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem 1.4rem;
+  margin-top: 1.5rem;
+  padding: .9rem 1rem;
+  border: 1px solid var(--rule);
+  background: var(--surface-2);
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+.legend b {
+  font-family: var(--mono);
+  font-size: .7rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+}
+.legend span { display: inline-flex; align-items: center; gap: .45rem; }
+
+/* ── Groupes d'actifs ───────────────────────────────────────── */
+
+.group { margin-top: 2.5rem; }
+
+.group-head {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding-bottom: .6rem;
+  border-bottom: 2px solid currentColor;
+}
+.group-head h3 {
+  font-family: var(--serif);
+  font-size: var(--step-2);
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -.01em;
+}
+.group-head .count {
+  font-family: var(--mono);
+  font-size: .78rem;
+  color: var(--ink-3);
+  margin-left: auto;
+}
+.group.up   .group-head { color: var(--up); }
+.group.down .group-head { color: var(--down); }
+.group.watch .group-head { color: var(--watch); }
+.group-head h3 { color: var(--ink); }
+
+.asset {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.35fr) 6.5rem 8.5rem minmax(210px, auto) 6.5rem;
+  gap: 0 1.25rem;
+  align-items: center;
+  padding: 1rem 0 1.05rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.id .ticker {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: var(--step-0);
+  letter-spacing: -.01em;
+}
+.id .name {
+  font-size: var(--step--1);
+  color: var(--ink-2);
+  line-height: 1.35;
+}
+.id .sector {
+  font-family: var(--mono);
+  font-size: .68rem;
+  color: var(--ink-3);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-top: .15rem;
+}
+
+.px {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.px .last { font-family: var(--mono); font-weight: 600; font-size: var(--step-0); }
+.px .chg { font-family: var(--mono); font-size: var(--step--1); font-weight: 500; }
+.px .vol { font-size: .7rem; color: var(--ink-3); font-family: var(--mono); }
+.pos { color: var(--up); }
+.neg { color: var(--down); }
+.rail dd small.pos { color: var(--up); }
+.rail dd small.neg { color: var(--down); }
+
+.spark { line-height: 0; }
+
+.size {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.size .shares { font-family: var(--mono); font-weight: 600; }
+.size .cap { font-size: .7rem; color: var(--ink-3); font-family: var(--mono); }
+
+.note {
+  grid-column: 1 / -1;
+  margin-top: .55rem;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+  max-width: 88ch;
+}
+.note b { color: var(--ink); font-weight: 600; }
+.note .invalid {
+  font-family: var(--mono);
+  font-size: .74rem;
+  color: var(--ink-3);
+}
+.note .catalyst {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-family: var(--mono);
+  font-size: .7rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--brass);
+  border: 1px solid var(--brass-dim);
+  padding: .1rem .45rem;
+  margin-right: .5rem;
+  white-space: nowrap;
+}
+
+/* ── Bandeau des six horizons ───────────────────────────────── */
+
+.horizons { display: flex; gap: 3px; }
+.h-cell {
+  flex: 1;
+  min-width: 30px;
+  text-align: center;
+  cursor: default;
+}
+.h-cell .h-label {
+  font-family: var(--mono);
+  font-size: .62rem;
+  letter-spacing: .04em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.h-box {
+  position: relative;
+  height: 30px;
+  border: 1px solid var(--rule-2);
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.h-fill {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  z-index: 0;
+}
+.h-glyph {
+  position: relative;
+  z-index: 1;
+  font-family: var(--mono);
+  font-size: .72rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.h-box.na { border-style: dashed; background: transparent; }
+.h-box.na .h-glyph { color: var(--ink-3); font-weight: 400; }
+.h-box.up   { border-color: var(--up); }
+.h-box.up   .h-fill { background: var(--up-wash); }
+.h-box.up   .h-glyph { color: var(--up); }
+.h-box.down { border-color: var(--down); }
+.h-box.down .h-fill { background: var(--down-wash); }
+.h-box.down .h-glyph { color: var(--down); }
+.h-box.flat .h-glyph { color: var(--ink-3); }
+
+/* ── Positions ouvertes ─────────────────────────────────────── */
+
+.pos-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  margin-top: 1.75rem;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.pos-summary div { background: var(--surface); padding: .8rem 1rem; }
+.pos-summary dt {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.pos-summary dd {
+  margin: .25rem 0 0;
+  font-family: var(--mono);
+  font-size: var(--step-1);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.group.held .group-head { color: var(--brass); }
+
+/* Colonne de droite : le résultat de la position remplace la taille */
+.pnl { text-align: right; font-variant-numeric: tabular-nums; }
+.pnl .amount { font-family: var(--mono); font-weight: 600; font-size: var(--step-0); }
+.pnl .rate { font-family: var(--mono); font-size: var(--step--1); }
+.pnl .held { font-size: .7rem; color: var(--ink-3); font-family: var(--mono); }
+
+.pos-meta {
+  grid-column: 1 / -1;
+  margin-top: .35rem;
+  font-family: var(--mono);
+  font-size: .72rem;
+  color: var(--ink-3);
+}
+.pos-meta b { color: var(--ink-2); font-weight: 500; }
+
+/* Une position dont le niveau d'invalidation est franchi doit se voir */
+.asset.breached {
+  background: var(--down-wash);
+  /* Étend le fond au-delà de la grille sans toucher à la mise en page */
+  box-shadow: -.75rem 0 0 var(--down-wash), .75rem 0 0 var(--down-wash);
+}
+.asset.breached .note b { color: var(--down); }
+.flag {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-family: var(--mono);
+  font-size: .7rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--down);
+  border: 1px solid var(--down);
+  padding: .1rem .45rem;
+  margin-right: .5rem;
+  white-space: nowrap;
+}
+
+/* ── Méthode ────────────────────────────────────────────────── */
+
+.method {
+  margin-top: 1.75rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+  gap: 1.5rem;
+}
+.method h4 {
+  font-family: var(--mono);
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin: 0 0 .5rem;
+  font-weight: 600;
+}
+.method p { margin: 0; color: var(--ink-2); font-size: var(--step--1); }
+
+.caveat {
+  margin-top: 2.5rem;
+  padding: 1.25rem 1.4rem;
+  border: 1px solid var(--rule-2);
+  border-left: 4px solid var(--brass);
+  background: var(--surface);
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+.caveat strong { color: var(--ink); }
+
+footer {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: .72rem;
+  color: var(--ink-3);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+/* ── Infobulle ──────────────────────────────────────────────── */
+
+#tip {
+  position: fixed;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .12s ease;
+  background: var(--ink);
+  color: var(--bg);
+  padding: .5rem .65rem;
+  font-family: var(--mono);
+  font-size: .72rem;
+  line-height: 1.45;
+  max-width: 260px;
+  box-shadow: var(--shadow);
+}
+#tip.on { opacity: 1; }
+#tip b { color: var(--bg); font-weight: 600; }
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+@media (max-width: 900px) {
+  .asset {
+    grid-template-columns: 1fr 6.5rem;
+    row-gap: .85rem;
+  }
+  .asset .spark { grid-column: 1 / -1; }
+  .asset .horizons { grid-column: 1 / -1; }
+  .asset .size { grid-column: 2; text-align: right; }
+  .news li { grid-template-columns: 1fr; }
+  .news time { padding-top: 0; }
+  .news .src { grid-column: 1; }
+}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="wordmark">Financial Watchtower</div>
+  <h1>Brief Europe <em>— ouverture</em></h1>
+  <div class="dateline" id="dateline">vendredi 28 août 2026 · 07:30 CEST · snapshot de 06:55</div>
+
+  <div class="mock">
+    <strong>Maquette</strong>
+    <span>Toutes les valeurs de cette page sont <b>fictives</b> et générées pour valider la mise en page. Aucun chiffre n'est une donnée de marché réelle.</span>
+  </div>
+
+  <dl class="rail">
+    <div><dt>Ouverture Euronext</dt><dd>09:00 <small>dans 1 h 30</small></dd></div>
+    <div><dt>Univers balayé</dt><dd>412 <small>titres</small></dd></div>
+    <div><dt>Éligibles 3,50–50 €</dt><dd>47 <small>retenus 15</small></dd></div>
+    <div><dt>Positions ouvertes</dt><dd id="rail-pos">—</dd></div>
+  </dl>
+</header>
+
+<section id="actu">
+  <div class="eyebrow">Dernières 24 heures</div>
+  <h2>Ce qu'il faut savoir avant l'ouverture</h2>
+  <ul class="news" id="news"></ul>
+</section>
+
+<section id="carte">
+  <div class="eyebrow">Vue d'ensemble</div>
+  <h2>La carte du jour</h2>
+  <p class="lede">Les quinze retenus, placés selon leur performance sur cinq séances et l'anomalie de leur volume. Le screener remonte ce qui bouge en volume inhabituel ; la direction et le catalyseur décident ensuite du classement.</p>
+
+  <figure class="figure">
+    <figcaption>
+      <span class="fig-title">Performance 5 séances contre volume relatif</span>
+      Un volume relatif de 2,0 signifie deux fois le volume moyen des vingt dernières séances. Survolez un point pour le détail.
+    </figcaption>
+    <div class="scatter-holder"><svg id="scatter" role="img" aria-label="Nuage de points des quinze actifs retenus, performance sur cinq séances en abscisse et volume relatif en ordonnée"></svg></div>
+  </figure>
+</section>
+
+<section id="actifs">
+  <div class="eyebrow">Les 15 actifs du jour</div>
+  <h2>Sélection et lectures par horizon</h2>
+  <p class="lede">Critères : cours entre 3,50 € et 50 €, position plafonnée à 50 €, titres entiers. La colonne « parts » indique combien de titres entiers tiennent dans 50 € et le capital réellement engagé.</p>
+
+  <div class="legend">
+    <b>Lecture des horizons</b>
+    <span><svg width="16" height="16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" fill="var(--up-wash)" stroke="var(--up)"></rect></svg> favorable</span>
+    <span><svg width="16" height="16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" fill="var(--down-wash)" stroke="var(--down)"></rect></svg> défavorable</span>
+    <span><svg width="16" height="16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" fill="var(--surface-2)" stroke="var(--rule-2)"></rect></svg> sans biais</span>
+    <span><svg width="16" height="16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" fill="none" stroke="var(--ink-3)" stroke-dasharray="3 2"></rect></svg> non applicable</span>
+    <span>La hauteur du remplissage indique la confiance : faible, moyenne, forte.</span>
+  </div>
+
+  <div id="groups"></div>
+</section>
+
+<section id="positions">
+  <div class="eyebrow">Signalées dans le chat</div>
+  <h2>Vos positions ouvertes</h2>
+  <p class="lede">Mêmes lectures que pour la sélection du jour, à une nuance près : sur une position déjà ouverte, les horizons se lisent <b>tenir ou sortir</b>, pas <b>entrer</b>. L'horizon compté part de votre date d'entrée, pas d'aujourd'hui.</p>
+
+  <div class="pos-summary" id="pos-summary"></div>
+  <div class="group held" id="posrows"></div>
+</section>
+
+<section id="methode">
+  <div class="eyebrow">Comment lire ce brief</div>
+  <h2>Méthode et limites</h2>
+
+  <div class="method">
+    <div>
+      <h4>Sélection</h4>
+      <p>Momentum, volume anormal et catalyseur identifiable. Un titre qui bouge sans raison repérable reste en « attention » plutôt qu'en prévision.</p>
+    </div>
+    <div>
+      <h4>L'horizon 4 heures</h4>
+      <p>Réservé aux catalyseurs datés — résultats, conférence, annonce planifiée. Hors de ce cas, la case reste vide plutôt que de meubler.</p>
+    </div>
+    <div>
+      <h4>Confiance</h4>
+      <p>La hauteur de remplissage traduit la solidité du signal, pas son ampleur. Un remplissage faible sur un horizon long veut dire : lecture fragile.</p>
+    </div>
+    <div>
+      <h4>Invalidation</h4>
+      <p>Chaque lecture indique le niveau qui la contredit. Franchi, la lecture ne tient plus — c'est l'information la plus utile de la ligne.</p>
+    </div>
+  </div>
+
+  <div class="caveat">
+    <strong>Ce brief n'est pas un conseil en investissement.</strong> Les lectures par horizon sont des observations techniques assorties d'un niveau de confiance, pas des prévisions ni des recommandations d'achat ou de vente. Sur quatre heures, l'essentiel du mouvement d'un titre reste du bruit, même quand un catalyseur est daté. Les décisions et leurs conséquences vous appartiennent.
+  </div>
+</section>
+
+<footer>
+  <span>Financial Watchtower · brief EU</span>
+  <span id="foot-stamp">maquette — données fictives</span>
+</footer>
+
+</div>
+
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+/* Contrat de données du gabarit. Remplacer /*__DATA__*​/ par un objet JSON
+   de cette forme, construit à partir de data/snapshot-<region>.json :
+
+   news      [{time:"06:40", iso, title, why, source, url}]           3 à 5
+   assets    [{ticker, name, sector, group:"up"|"down"|"watch",
+               price, chg, ret5, relvol, shares, invalid,
+               catalyst: null | "Résultats T1 · 08h00",
+               note: "<html court>",
+               series: [90 cours de clôture],
+               h: [6 cases, dans l'ordre 4h, jour, 3j, 7j, 10j, 14j]}]  15
+   positions [{ticker, name, sector, shares, entry, last, since,
+               sessions, invalid, breached:bool, note, chg, relvol,
+               series, h}]
+
+   Une case d'horizon : {d:"up"|"down"|"flat"|"na", c:1|2|3, n:"note"}
+   c = confiance (1 faible, 3 forte), absente si d vaut flat ou na.
+   d:"na" est réservé à la case 4 h sans catalyseur daté.
+
+   Champs du snapshot à reprendre : close_eur → price, ret_1d_pct → chg,
+   ret_5d_pct → ret5, rel_volume → relvol, max_shares_50eur → shares,
+   series.close → series. Le reste (groupe, horizons, note, invalidation)
+   relève de l'analyse, pas du snapshot. */
+const DATA = /*__DATA__*/;
+
+/* ── Infobulle ──────────────────────────────────────────────── */
+const tip = document.getElementById('tip');
+function showTip(html, ev) {
+  tip.innerHTML = html;
+  tip.classList.add('on');
+  moveTip(ev);
+}
+function moveTip(ev) {
+  const pad = 14;
+  const r = tip.getBoundingClientRect();
+  let x = ev.clientX + pad, y = ev.clientY + pad;
+  if (x + r.width > window.innerWidth - 8) x = ev.clientX - r.width - pad;
+  if (y + r.height > window.innerHeight - 8) y = ev.clientY - r.height - pad;
+  tip.style.left = x + 'px';
+  tip.style.top = y + 'px';
+}
+function hideTip() { tip.classList.remove('on'); }
+
+/* ── Formatage ──────────────────────────────────────────────── */
+const nf = (v, d = 2) => v.toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d });
+const pct = v => (v >= 0 ? '+' : '−') + nf(Math.abs(v)) + ' %';
+const eur = v => nf(v) + ' €';
+const cls = v => v >= 0 ? 'pos' : 'neg';
+
+/* ── Actualité ──────────────────────────────────────────────── */
+document.getElementById('news').innerHTML = DATA.news.map(n => `
+  <li>
+    <time datetime="${n.iso}">${n.time}</time>
+    <div>
+      <h3>${n.title}</h3>
+      <p>${n.why}</p>
+    </div>
+    <div class="src"><a href="${n.url}" target="_blank" rel="noopener noreferrer">${n.source} ↗</a></div>
+  </li>`).join('');
+
+/* ── Sparkline ──────────────────────────────────────────────── */
+function sparkline(series, color) {
+  const W = 128, H = 34, P = 3;
+  const lo = Math.min(...series), hi = Math.max(...series);
+  const span = (hi - lo) || 1;
+  const x = i => P + i * (W - 2 * P) / (series.length - 1);
+  const y = v => H - P - ((v - lo) / span) * (H - 2 * P);
+  const line = series.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
+  const area = `${line} L${x(series.length - 1).toFixed(1)} ${H} L${x(0).toFixed(1)} ${H} Z`;
+  const lastX = x(series.length - 1), lastY = y(series[series.length - 1]);
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">
+    <path d="${area}" fill="${color}" opacity=".16"></path>
+    <path d="${line}" fill="none" stroke="${color}" stroke-width="2"
+          stroke-linejoin="round" stroke-linecap="round"></path>
+    <circle cx="${lastX.toFixed(1)}" cy="${lastY.toFixed(1)}" r="3"
+            fill="${color}" stroke="var(--surface)" stroke-width="2"></circle>
+  </svg>`;
+}
+
+/* ── Bandeau des six horizons ───────────────────────────────── */
+const H_LABELS = ['4h', 'Jour', '3 j', '7 j', '10 j', '14 j'];
+const H_FULL = ['4 heures', 'la séance', '3 jours', '7 jours', '10 jours', '14 jours'];
+const CONF_TEXT = { 1: 'confiance faible', 2: 'confiance moyenne', 3: 'confiance forte' };
+const DIR_TEXT = { up: 'favorable', down: 'défavorable', flat: 'sans biais', na: 'non applicable' };
+
+function horizons(hs, ticker) {
+  return `<div class="horizons">` + hs.map((h, i) => {
+    const dir = h.d;
+    const conf = h.c || 0;
+    const height = dir === 'na' || dir === 'flat' ? 0 : [0, 33, 66, 100][conf];
+    const glyph = dir === 'up' ? '▲' : dir === 'down' ? '▼' : dir === 'flat' ? '·' : '—';
+    const detail = dir === 'na'
+      ? 'Pas de catalyseur daté — horizon non applicable.'
+      : `${DIR_TEXT[dir]}${conf ? ' · ' + CONF_TEXT[conf] : ''}`;
+    return `<div class="h-cell" tabindex="0"
+             data-tip="<b>${ticker} · ${H_FULL[i]}</b><br>${detail}${h.n ? '<br>' + h.n : ''}"
+             aria-label="${ticker}, ${H_FULL[i]} : ${detail}">
+      <div class="h-label">${H_LABELS[i]}</div>
+      <div class="h-box ${dir}">
+        <div class="h-fill" style="height:${height}%"></div>
+        <span class="h-glyph">${glyph}</span>
+      </div>
+    </div>`;
+  }).join('') + `</div>`;
+}
+
+/* ── Groupes ────────────────────────────────────────────────── */
+const GROUPS = [
+  { key: 'up',    title: 'Prévision à la hausse', color: 'var(--up)' },
+  { key: 'down',  title: 'Prévision à la baisse', color: 'var(--down)' },
+  { key: 'watch', title: 'Mérite une attention',  color: 'var(--watch)' },
+];
+
+document.getElementById('groups').innerHTML = GROUPS.map(g => {
+  const items = DATA.assets.filter(a => a.group === g.key);
+  return `<div class="group ${g.key}">
+    <div class="group-head">
+      <h3>${g.title}</h3>
+      <span class="count">${items.length} titres</span>
+    </div>
+    ${items.map(a => `
+      <div class="asset">
+        <div class="id">
+          <div class="ticker">${a.ticker}</div>
+          <div class="name">${a.name}</div>
+          <div class="sector">${a.sector}</div>
+        </div>
+        <div class="px">
+          <div class="last">${eur(a.price)}</div>
+          <div class="chg ${cls(a.chg)}">${pct(a.chg)}</div>
+          <div class="vol">vol ×${nf(a.relvol, 1)}</div>
+        </div>
+        <div class="spark" title="90 séances">${sparkline(a.series, g.color)}</div>
+        ${horizons(a.h, a.ticker)}
+        <div class="size">
+          <div class="shares">${a.shares} ${a.shares > 1 ? 'parts' : 'part'}</div>
+          <div class="cap">${eur(a.shares * a.price)}</div>
+        </div>
+        <p class="note">${a.catalyst ? `<span class="catalyst">${a.catalyst}</span>` : ''}${a.note}
+          <span class="invalid"> · invalidation ${eur(a.invalid)}</span></p>
+      </div>`).join('')}
+  </div>`;
+}).join('');
+
+/* ── Positions ──────────────────────────────────────────────── */
+const signed = v => (v >= 0 ? '+' : '−') + nf(Math.abs(v)) + ' €';
+const signedPct = v => (v >= 0 ? '+' : '−') + nf(Math.abs(v)) + ' %';
+
+const totalEngaged = DATA.positions.reduce((s, p) => s + p.shares * p.entry, 0);
+const totalPnl = DATA.positions.reduce((s, p) => s + p.shares * (p.last - p.entry), 0);
+const breachedCount = DATA.positions.filter(p => p.breached).length;
+
+document.getElementById('pos-summary').innerHTML = `
+  <div><dt>Positions</dt><dd>${DATA.positions.length}</dd></div>
+  <div><dt>Capital engagé</dt><dd>${eur(totalEngaged)}</dd></div>
+  <div><dt>Résultat latent</dt><dd class="${cls(totalPnl)}">${signed(totalPnl)}</dd></div>
+  <div><dt>Invalidations franchies</dt><dd class="${breachedCount ? 'neg' : ''}">${breachedCount}</dd></div>`;
+
+document.getElementById('posrows').innerHTML = DATA.positions.map(p => {
+  const engaged = p.shares * p.entry;
+  const pnl = p.shares * (p.last - p.entry);
+  const rate = (p.last / p.entry - 1) * 100;
+  const tone = pnl >= 0 ? 'var(--up)' : 'var(--down)';
+  return `
+    <div class="asset${p.breached ? ' breached' : ''}">
+      <div class="id">
+        <div class="ticker">${p.ticker}</div>
+        <div class="name">${p.name}</div>
+        <div class="sector">${p.sector}</div>
+      </div>
+      <div class="px">
+        <div class="last">${eur(p.last)}</div>
+        <div class="chg ${cls(p.chg)}">${signedPct(p.chg)}</div>
+        <div class="vol">vol ×${nf(p.relvol, 1)}</div>
+      </div>
+      <div class="spark" title="90 séances">${sparkline(p.series, tone)}</div>
+      ${horizons(p.h, p.ticker)}
+      <div class="pnl">
+        <div class="amount ${cls(pnl)}">${signed(pnl)}</div>
+        <div class="rate ${cls(rate)}">${signedPct(rate)}</div>
+        <div class="held">${p.sessions} séances</div>
+      </div>
+      <p class="note">${p.breached ? '<span class="flag">Invalidation franchie</span>' : ''}${p.note}
+        <span class="invalid"> · invalidation ${eur(p.invalid)}</span></p>
+      <div class="pos-meta">${p.shares} ${p.shares > 1 ? 'parts' : 'part'} à <b>${eur(p.entry)}</b>
+        · engagé <b>${eur(engaged)}</b> · ouverte le <b>${p.since}</b></div>
+    </div>`;
+}).join('');
+
+document.getElementById('rail-pos').innerHTML =
+  `${DATA.positions.length} <small class="${cls(totalPnl)}">${signed(totalPnl)}</small>`;
+
+/* ── Nuage de points ────────────────────────────────────────── */
+(function scatter() {
+  const svg = document.getElementById('scatter');
+  const W = 900, H = 400, M = { t: 22, r: 26, b: 46, l: 56 };
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width', '100%');
+  svg.style.minWidth = '560px';
+
+  const pts = DATA.assets;
+  const xs = pts.map(p => p.ret5), ys = pts.map(p => p.relvol);
+  const xMin = Math.min(...xs, 0) - 1.5, xMax = Math.max(...xs, 0) + 1.5;
+  const yMin = 0.8, yMax = Math.max(...ys) + 0.4;
+
+  const X = v => M.l + (v - xMin) / (xMax - xMin) * (W - M.l - M.r);
+  const Y = v => H - M.b - (v - yMin) / (yMax - yMin) * (H - M.t - M.b);
+
+  const color = { up: 'var(--up)', down: 'var(--down)', watch: 'var(--watch)' };
+  let out = '';
+
+  // Grille discrète
+  const yTicks = [1, 1.5, 2, 2.5, 3, 3.5, 4].filter(t => t >= yMin && t <= yMax);
+  yTicks.forEach(t => {
+    out += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}"
+             stroke="var(--rule)" stroke-width="1"></line>`;
+    out += `<text x="${M.l - 10}" y="${Y(t) + 4}" text-anchor="end"
+             font-family="var(--mono)" font-size="11" fill="var(--ink-3)">×${t.toFixed(1)}</text>`;
+  });
+
+  const xTicks = [];
+  for (let t = Math.ceil(xMin / 5) * 5; t <= xMax; t += 5) xTicks.push(t);
+  xTicks.forEach(t => {
+    out += `<text x="${X(t)}" y="${H - M.b + 20}" text-anchor="middle"
+             font-family="var(--mono)" font-size="11" fill="var(--ink-3)">${t > 0 ? '+' : ''}${t} %</text>`;
+  });
+
+  // Zéro : la séparation qui compte
+  out += `<line x1="${X(0)}" x2="${X(0)}" y1="${M.t}" y2="${H - M.b}"
+           stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="4 3"></line>`;
+
+  // Axes
+  out += `<line x1="${M.l}" x2="${W - M.r}" y1="${H - M.b}" y2="${H - M.b}"
+           stroke="var(--rule-2)" stroke-width="1"></line>`;
+  out += `<text x="${M.l}" y="${H - 6}" font-family="var(--mono)" font-size="11"
+           fill="var(--ink-3)">performance 5 séances →</text>`;
+  out += `<text transform="translate(14,${M.t + 8}) rotate(-90)" text-anchor="end"
+           font-family="var(--mono)" font-size="11" fill="var(--ink-3)">← volume relatif</text>`;
+
+  // Points, avec anneau de surface pour les chevauchements.
+  // Dessinés après les traits de rappel, avant les étiquettes.
+  let dotsOut = '', leaders = '', labelsOut = '';
+  pts.forEach(p => {
+    dotsOut += `<circle class="pt" cx="${X(p.ret5).toFixed(1)}" cy="${Y(p.relvol).toFixed(1)}" r="6"
+             fill="${color[p.group]}" stroke="var(--surface)" stroke-width="2"
+             tabindex="0" role="img"
+             aria-label="${p.ticker}, ${p.ret5.toFixed(1)} pour cent sur cinq séances, volume ${p.relvol.toFixed(1)} fois la moyenne"
+             data-tip="<b>${p.ticker}</b> — ${p.name}<br>5 séances ${p.ret5 > 0 ? '+' : '−'}${Math.abs(p.ret5).toFixed(1)} %<br>volume ×${p.relvol.toFixed(1)} · ${nf(p.price)} €"></circle>`;
+  });
+
+  /* Étiquettes : chaque point porte son nom. La position est choisie parmi
+     des candidats successifs — droite, gauche, dessus, dessous, puis décalages
+     verticaux — en écartant ceux qui chevauchent une étiquette déjà posée, un
+     point, ou le bord du cadre. Un trait de rappel relie l'étiquette à son
+     point quand elle a dû s'éloigner. */
+  const CHAR_W = 6.15, LAB_H = 12, GAP = 9;
+  const hit = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x &&
+                        a.y < b.y + b.h && a.y + a.h > b.y;
+
+  const dots = pts.map(p => ({ x: X(p.ret5) - 8, y: Y(p.relvol) - 8, w: 16, h: 16 }));
+  const taken = [];
+
+  // Les points les plus hauts en volume passent en premier : ce sont ceux
+  // qu'on regarde, ils méritent la meilleure place.
+  [...pts].sort((a, b) => b.relvol - a.relvol).forEach(p => {
+    const text = p.ticker.split('.')[0];
+    const w = text.length * CHAR_W, h = LAB_H;
+    const cx = X(p.ret5), cy = Y(p.relvol);
+
+    const cands = [
+      { x: cx + GAP,         y: cy - h / 2,     a: 'start'  },
+      { x: cx - GAP - w,     y: cy - h / 2,     a: 'end'    },
+      { x: cx - w / 2,       y: cy - GAP - h,   a: 'middle' },
+      { x: cx - w / 2,       y: cy + GAP,       a: 'middle' },
+    ];
+    for (let k = 1; k <= 7; k++) {
+      const dy = k * 14;
+      cands.push({ x: cx + GAP,     y: cy - h / 2 - dy, a: 'start' });
+      cands.push({ x: cx + GAP,     y: cy - h / 2 + dy, a: 'start' });
+      cands.push({ x: cx - GAP - w, y: cy - h / 2 - dy, a: 'end'   });
+      cands.push({ x: cx - GAP - w, y: cy - h / 2 + dy, a: 'end'   });
+    }
+
+    const fits = c => c.x >= 4 && c.x + w <= W - 4 &&
+                      c.y >= 2 && c.y + h <= H - M.b - 2 &&
+                      !taken.some(t => hit({ ...c, w, h }, t)) &&
+                      !dots.some(d => hit({ ...c, w, h }, d));
+
+    const spot = cands.find(fits) || cands[0];
+    taken.push({ x: spot.x, y: spot.y, w, h });
+
+    const tx = spot.a === 'start' ? spot.x
+             : spot.a === 'end'   ? spot.x + w
+                                  : spot.x + w / 2;
+    const ty = spot.y + h - 3;
+
+    // Trait de rappel si l'étiquette s'est éloignée de son point
+    const midY = spot.y + h / 2;
+    if (Math.abs(midY - cy) > 10) {
+      const anchorX = spot.a === 'end' ? spot.x + w : spot.x;
+      leaders += `<line x1="${cx.toFixed(1)}" y1="${cy.toFixed(1)}"
+               x2="${anchorX.toFixed(1)}" y2="${midY.toFixed(1)}"
+               stroke="var(--rule-2)" stroke-width="1"></line>`;
+    }
+
+    labelsOut += `<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" text-anchor="${spot.a}"
+             font-family="var(--mono)" font-size="11" font-weight="500"
+             fill="var(--ink-2)" paint-order="stroke"
+             stroke="var(--surface)" stroke-width="3" stroke-linejoin="round"
+             >${text}</text>`;
+  });
+
+  svg.innerHTML = out + leaders + dotsOut + labelsOut;
+})();
+
+/* ── Câblage des infobulles ─────────────────────────────────── */
+document.querySelectorAll('[data-tip]').forEach(el => {
+  const html = el.getAttribute('data-tip');
+  el.addEventListener('mouseenter', e => showTip(html, e));
+  el.addEventListener('mousemove', moveTip);
+  el.addEventListener('mouseleave', hideTip);
+  el.addEventListener('focus', e => {
+    const r = el.getBoundingClientRect();
+    showTip(html, { clientX: r.left + r.width / 2, clientY: r.bottom });
+  });
+  el.addEventListener('blur', hideTip);
+});
+</script>
