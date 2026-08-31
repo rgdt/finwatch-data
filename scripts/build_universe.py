@@ -64,6 +64,9 @@ SOURCES = {
         # Stockholm — clean() sait les reconnaître.
         ("SMI", "https://en.wikipedia.org/wiki/Swiss_Market_Index", ".SW"),
         ("OMX Stockholm 30", "https://en.wikipedia.org/wiki/OMX_Stockholm_30", ".ST"),
+        # Oslo : les tickers y sont préfixés de la place (« OSE: MPCC »),
+        # clean() sait retirer ce préfixe.
+        ("OBX", "https://en.wikipedia.org/wiki/OBX_Index", ".OL"),
     ],
     "us": [
         ("S&P 500", "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies", ""),
@@ -106,6 +109,9 @@ def clean(raw: object, suffix: str) -> str | None:
     sym = str(raw).strip().upper()
     # Retire les notes de bas de page ("AIR[1]") et les espaces internes
     sym = re.sub(r"\[.*?\]", "", sym).replace(" ", "")
+    # Certaines pages préfixent le ticker de sa place ("OSE: MPCC", "BIT: ENI")
+    if ":" in sym:
+        sym = sym.rsplit(":", 1)[-1]
     if not sym:
         return None
     # Certaines tables donnent déjà le ticker suffixé

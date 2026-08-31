@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import sys
 import time
 from collections import Counter
@@ -39,10 +40,18 @@ PRICE_MIN_EUR = 3.50      # cours plancher
 PRICE_MAX_EUR = 50.00     # cours plafond
 MAX_POSITION_EUR = 50.00  # taille de position maximale, titres entiers
 
-# Nombre de candidats retenus dans le snapshot. Large devant les 15 du brief :
-# la marge sert à appliquer en aval le filtre catalyseur, que le script ne
-# connaît pas.
-TOP_N = 45
+# Ce script ne filtre rien. Il mesure tout l'univers et publie tout.
+#
+# Le tri, la fourchette de prix, le seuil de liquidité et la sélection sont
+# appliqués en aval par `claude/screener.py`, dans le projet — là où vivent
+# aussi les positions ouvertes. Le dépôt reste ainsi un pur relais de données :
+# il ne sait rien de qui le lit, et changer un critère ne demande ni commit ni
+# nouvelle exécution des workflows.
+#
+# Seul le contexte détaillé (nom, secteur, prochaine date de résultats) reste
+# limité aux titres les plus actifs : il coûte un appel réseau par titre, ce qui
+# est intenable sur 1 500.
+CONTEXT_TOP_N = 80
 
 # Nombre de séances de cours conservées pour les candidats, pour les
 # graphiques du brief.
@@ -55,6 +64,7 @@ MIN_AVG_VALUE_EUR = 250_000  # volume moyen 20j × cours, en euros
 # Poids du volume relatif dans le score d'activité. À 1,0 le volume et la
 # performance pèsent pareil ; au-dessus, l'anomalie de volume prime.
 VOLUME_EXPONENT = 1.5
+
 
 BATCH_SIZE = 120          # tickers par appel yfinance
 DOWNLOAD_RETRIES = 3
@@ -263,7 +273,14 @@ def safe(value: float, digits: int = 2) -> float | None:
 
 def measure(ticker: str, df: pd.DataFrame, fx: dict[str, float],
             currency: str) -> dict | None:
-    """Calcule les métriques d'un titre. Retourne None s'il est inéligible."""
+    """Calcule les métriques d'un titre. Ne juge pas de son éligibilité.
+
+    Retourne None uniquement quand la mesure est impossible : historique trop
+    court, devise inconnue, volume nul. Un titre hors fourchette de prix ou peu
+    liquide est mesuré comme les autres — c'est au screener, en aval, de
+    décider s'il le retient. Une position ouverte passée sous le cours plancher
+    est précisément celle dont on veut des nouvelles.
+    """
     close = df["Close"].dropna()
     if len(close) < 60:
         return None
@@ -274,8 +291,6 @@ def measure(ticker: str, df: pd.DataFrame, fx: dict[str, float],
 
     last = float(close.iloc[-1])
     price_eur = last * rate
-    if not (PRICE_MIN_EUR <= price_eur <= PRICE_MAX_EUR):
-        return None
 
     volume = df["Volume"].dropna()
     avg_volume_20 = float(volume.tail(20).mean()) if len(volume) >= 20 else float("nan")
@@ -283,8 +298,6 @@ def measure(ticker: str, df: pd.DataFrame, fx: dict[str, float],
         return None
 
     avg_value_eur = avg_volume_20 * price_eur
-    if avg_value_eur < MIN_AVG_VALUE_EUR:
-        return None
 
     last_volume = float(volume.iloc[-1])
     rel_volume = last_volume / avg_volume_20
@@ -381,16 +394,26 @@ def add_context(candidates: list[dict], frames: dict[str, pd.DataFrame]) -> None
             item.setdefault("name", ticker)
             item.setdefault("next_earnings", None)
 
-        # Série de cours pour les graphiques du brief
-        df = frames.get(ticker)
-        if df is not None:
-            tail = df.tail(SERIES_DAYS)
-            item["series"] = {
-                "dates": [str(d.date()) for d in tail.index],
-                "close": [safe(v, 4) for v in tail["Close"]],
-                "volume": [safe(v, 0) for v in tail["Volume"]],
-            }
         time.sleep(0.3)
+
+
+def attach_series(rows: list[dict], frames: dict[str, pd.DataFrame]) -> None:
+    """Ajoute la série de cours de chaque titre, pour les graphiques du brief.
+
+    Clôtures seules : le volume par séance n'est utilisé nulle part en aval, et
+    il pesait un tiers du fichier une fois l'univers entier publié. Les mesures
+    de volume qui servent — moyenne 20 séances et volume relatif — sont déjà
+    dans les métriques.
+    """
+    for item in rows:
+        df = frames.get(item["ticker"])
+        if df is None:
+            continue
+        tail = df.tail(SERIES_DAYS)
+        item["series"] = {
+            "dates": [str(d.date()) for d in tail.index],
+            "close": [safe(v, 4) for v in tail["Close"]],
+        }
 
 
 # --- Programme principal ----------------------------------------------------
@@ -426,7 +449,12 @@ def main() -> int:
     suffix_currency = {
         ".PA": "EUR", ".AS": "EUR", ".BR": "EUR", ".MC": "EUR",
         ".MI": "EUR", ".DE": "EUR", ".LS": "EUR", ".HE": "EUR",
-        ".L": "GBp", ".SW": "CHF", ".ST": "SEK", ".CO": "DKK", ".OL": "NOK",
+        ".IR": "EUR", ".VI": "EUR",
+        # Places allemandes régionales, courantes chez les courtiers grand public
+        ".F": "EUR", ".BE": "EUR", ".HM": "EUR", ".DU": "EUR",
+        ".MU": "EUR", ".SG": "EUR",
+        ".L": "GBp", ".SW": "CHF", ".ST": "SEK", ".CO": "DKK",
+        ".OL": "NOK", ".WA": "PLN",
     }
 
     measured: list[dict] = []
@@ -441,29 +469,31 @@ def main() -> int:
         if row:
             measured.append(row)
 
-    log(f"[{region.upper()}] {len(measured)} titres éligibles "
-        f"({PRICE_MIN_EUR}-{PRICE_MAX_EUR} €, liquidité suffisante)")
-
     measured.sort(key=lambda r: r["activity_score"] or 0, reverse=True)
-    candidates = measured[:TOP_N]
 
-    log(f"[{region.upper()}] enrichissement des {len(candidates)} candidats")
-    add_context(candidates, frames)
+    in_band = sum(1 for r in measured
+                  if r["close_eur"] and PRICE_MIN_EUR <= r["close_eur"] <= PRICE_MAX_EUR)
+    log(f"[{region.upper()}] {len(measured)} titres mesurés, "
+        f"dont {in_band} dans la fourchette {PRICE_MIN_EUR}-{PRICE_MAX_EUR} € "
+        f"(à titre indicatif : le filtrage se fait en aval)")
+
+    log(f"[{region.upper()}] contexte des {CONTEXT_TOP_N} titres les plus actifs")
+    add_context(measured[:CONTEXT_TOP_N], frames)
+
+    log(f"[{region.upper()}] séries de cours")
+    attach_series(measured, frames)
 
     snapshot = {
         "region": region,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "criteria": {
-            "price_min_eur": PRICE_MIN_EUR,
-            "price_max_eur": PRICE_MAX_EUR,
-            "max_position_eur": MAX_POSITION_EUR,
-            "min_avg_value_eur": MIN_AVG_VALUE_EUR,
-            "whole_shares_only": True,
-        },
+        "note": ("Aucun filtrage appliqué. Tri par activity_score décroissant. "
+                 "Les critères de sélection vivent dans claude/screener.py, "
+                 "côté projet."),
         "fx_to_eur": {k: safe(v, 6) for k, v in fx.items()},
         "universe_size": len(tickers),
         "series_downloaded": len(frames),
-        "eligible_count": len(measured),
+        "measured_count": len(measured),
+        "context_count": min(CONTEXT_TOP_N, len(measured)),
         # De quand datent réellement les cours. Une séance manquante ne se voit
         # pas en lisant les chiffres — elle se lit ici.
         "freshness": {
@@ -473,7 +503,7 @@ def main() -> int:
             "repaired_bars": FRESHNESS["repaired_bars"],
             "dropped_last_rows": dict(FRESHNESS["dropped_last_rows"]),
         },
-        "candidates": candidates,
+        "instruments": measured,
     }
 
     out = ROOT / "data" / f"snapshot-{region}.json"
