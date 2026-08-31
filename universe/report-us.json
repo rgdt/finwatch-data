@@ -1,14 +1,27 @@
 {
  "region": "us",
- "built_at": "2026-08-29T09:05:58+00:00",
+ "built_at": "2026-08-30T10:52:39+00:00",
  "total_unique": 1506,
  "per_source": {
-  "S&P 500": 503,
-  "Nasdaq-100": 0,
-  "S&P MidCap 400": 400,
-  "S&P SmallCap 600": 603
+  "S&P 500": {
+   "count": 503,
+   "reason": "ok"
+  },
+  "Nasdaq-100": {
+   "count": 0,
+   "reason": "aucune colonne de ticker dans les 18 tableaux"
+  },
+  "S&P MidCap 400": {
+   "count": 400,
+   "reason": "ok"
+  },
+  "S&P SmallCap 600": {
+   "count": 603,
+   "reason": "ok"
+  }
  },
  "empty_sources": [
   "Nasdaq-100"
- ]
+ ],
+ "regressions": []
 }
