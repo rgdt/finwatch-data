@@ -21,6 +21,7 @@ import json
 import math
 import sys
 import time
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -103,6 +104,65 @@ def fetch_fx() -> dict[str, float]:
 # --- Téléchargement des cours ----------------------------------------------
 
 
+# Traces de fraîcheur, remplies par repair() et publiées dans le snapshot.
+FRESHNESS = {
+    "raw_last_dates": Counter(),      # dernière date reçue de Yahoo, avant réparation
+    "kept_last_dates": Counter(),     # dernière date conservée
+    "repaired_bars": 0,               # barres dont les extrêmes ont été reconstruits
+    "dropped_last_rows": Counter(),   # champs manquants ayant coûté la dernière séance
+}
+
+
+def repair(df: pd.DataFrame, ticker: str) -> pd.DataFrame:
+    """Rend une série exploitable sans lui coûter sa séance la plus récente.
+
+    Yahoo renvoie fréquemment une barre dont la clôture est présente mais dont
+    les extrêmes manquent. La supprimer coûtait la séance la plus récente — sur
+    un screener de momentum, perdre le dernier jour fausse tout. On répare donc
+    plutôt que d'écarter : une barre sans extrêmes se reconstruit à partir de
+    l'ouverture et de la clôture, ce qui donne un true range égal à l'écart de
+    clôture à clôture. C'est la valeur juste pour une séance dont on ne connaît
+    que ces points, pas une invention.
+
+    Seules les barres sans clôture sont écartées : celles-là ne portent
+    réellement aucune information.
+    """
+    if df.empty:
+        return df
+
+    raw_last = df.dropna(how="all")
+    if not raw_last.empty:
+        FRESHNESS["raw_last_dates"][str(raw_last.index[-1].date())] += 1
+
+    close = df["Close"]
+    kept = df[close.notna()].copy()
+
+    if len(kept) < len(raw_last):
+        # Note ce qui manquait sur la dernière barre écartée, pour diagnostic
+        lost = raw_last.index.difference(kept.index)
+        if len(lost) and lost[-1] == raw_last.index[-1]:
+            row = df.loc[raw_last.index[-1]]
+            missing = ",".join(sorted(c for c in ("Open", "High", "Low", "Close", "Volume")
+                                      if c in row.index and pd.isna(row[c])))
+            FRESHNESS["dropped_last_rows"][missing or "inconnu"] += 1
+
+    if kept.empty:
+        return kept
+
+    # Reconstruit les extrêmes manquants à partir des points connus
+    for col, agg in (("High", "max"), ("Low", "min")):
+        if col not in kept:
+            continue
+        gaps = kept[col].isna()
+        if gaps.any():
+            bounds = kept[["Open", "Close"]].agg(agg, axis=1)
+            kept[col] = kept[col].fillna(bounds).fillna(kept["Close"])
+            FRESHNESS["repaired_bars"] += int(gaps.sum())
+
+    FRESHNESS["kept_last_dates"][str(kept.index[-1].date())] += 1
+    return kept
+
+
 def download(tickers: list[str]) -> dict[str, pd.DataFrame]:
     """Télécharge l'historique quotidien, par lots, avec reprise sur échec."""
     frames: dict[str, pd.DataFrame] = {}
@@ -144,11 +204,8 @@ def download(tickers: list[str]) -> dict[str, pd.DataFrame]:
                 df = raw[ticker] if len(batch) > 1 else raw
             except KeyError:
                 continue
-            # Yahoo renvoie souvent une barre du jour incomplète : cours de
-            # clôture ou extrêmes à NaN, volume à zéro. Elle fausse l'ATR (une
-            # seule valeur manquante suffit à annuler une moyenne mobile) et
-            # le volume relatif. On ne garde que les séances complètes.
-            df = df.dropna(subset=["Close", "High", "Low"])
+
+            df = repair(df, ticker)
             if len(df) >= 60:  # trop court pour des moyennes exploitables
                 frames[ticker] = df
 
@@ -407,6 +464,15 @@ def main() -> int:
         "universe_size": len(tickers),
         "series_downloaded": len(frames),
         "eligible_count": len(measured),
+        # De quand datent réellement les cours. Une séance manquante ne se voit
+        # pas en lisant les chiffres — elle se lit ici.
+        "freshness": {
+            "last_session": (FRESHNESS["kept_last_dates"].most_common(1) or [(None, 0)])[0][0],
+            "raw_last_dates": dict(FRESHNESS["raw_last_dates"].most_common(4)),
+            "kept_last_dates": dict(FRESHNESS["kept_last_dates"].most_common(4)),
+            "repaired_bars": FRESHNESS["repaired_bars"],
+            "dropped_last_rows": dict(FRESHNESS["dropped_last_rows"]),
+        },
         "candidates": candidates,
     }
 
