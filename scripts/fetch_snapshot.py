@@ -53,14 +53,17 @@ MAX_POSITION_EUR = 50.00  # taille de position maximale, titres entiers
 # est intenable sur 1 500.
 CONTEXT_TOP_N = 80
 
-# Séances de cours conservées, pour les sparklines du brief. 22 séances valent
-# environ 30 jours calendaires : l'échelle des horizons de détention, qui vont
-# de 4 heures à 14 jours. Une courbe sur plusieurs mois racontait une autre
-# histoire que celle que le brief cherche à lire.
+# Séances de cours publiées. À ne pas confondre avec ce que la sparkline
+# affiche : le gabarit n'en dessine que les 22 dernières, soit environ 30 jours
+# calendaires, l'échelle des horizons de détention.
 #
-# Descendre à 14 jours calendaires donnerait une dizaine de points — trop peu
-# pour qu'une courbe se lise encore comme une courbe.
-SERIES_DAYS = 22
+# Publier davantage sert l'analyse, pas le dessin. Ramené à 22 séances, le
+# snapshot ne permettait plus de situer un mouvement dans son contexte — savoir
+# si une hausse sort d'une base de trois mois ou prolonge une tendance déjà
+# vieille change la lecture d'un horizon à 14 jours. Les indicateurs, eux, se
+# calculent sur un an téléchargé côté runner : ils n'ont jamais dépendu de ce
+# réglage.
+SERIES_DAYS = 90
 
 # Liquidité minimale : en dessous, le carnet est trop mince pour qu'une
 # lecture technique ait un sens, même sur des positions de 50 €.

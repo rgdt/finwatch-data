@@ -742,7 +742,8 @@ footer {
                price, chg, ret5, relvol, shares, invalid,
                catalyst: null | "Résultats T1 · 08h00",
                note: "<html court>",
-               series: [90 cours de clôture],
+               series: [cours de clôture, 90 séances ; seules les 22
+                        dernières sont dessinées, le reste sert l'analyse],
                h: [6 cases, dans l'ordre 4h, jour, 3j, 7j, 10j, 14j]}]  15
    positions [{ticker, name, sector, shares, entry, last, since,
                sessions, invalid, breached:bool, note, chg, relvol,
@@ -794,7 +795,16 @@ document.getElementById('news').innerHTML = DATA.news.map(n => `
   </li>`).join('');
 
 /* ── Sparkline ──────────────────────────────────────────────── */
-function sparkline(series, color) {
+
+/* Séances dessinées. Le snapshot en publie davantage — l'analyse a besoin de
+   situer un mouvement dans son contexte — mais la courbe, elle, doit couvrir
+   l'échelle des horizons de détention : 22 séances valent environ 30 jours
+   calendaires. Sur plusieurs mois, la sparkline racontait une autre histoire
+   que celle que le brief cherche à lire. */
+const SPARK_SESSIONS = 22;
+
+function sparkline(full, color) {
+  const series = full.slice(-SPARK_SESSIONS);
   const W = 128, H = 34, P = 3;
   const lo = Math.min(...series), hi = Math.max(...series);
   const span = (hi - lo) || 1;
