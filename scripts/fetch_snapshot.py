@@ -53,9 +53,14 @@ MAX_POSITION_EUR = 50.00  # taille de position maximale, titres entiers
 # est intenable sur 1 500.
 CONTEXT_TOP_N = 80
 
-# Nombre de séances de cours conservées pour les candidats, pour les
-# graphiques du brief.
-SERIES_DAYS = 90
+# Séances de cours conservées, pour les sparklines du brief. 22 séances valent
+# environ 30 jours calendaires : l'échelle des horizons de détention, qui vont
+# de 4 heures à 14 jours. Une courbe sur plusieurs mois racontait une autre
+# histoire que celle que le brief cherche à lire.
+#
+# Descendre à 14 jours calendaires donnerait une dizaine de points — trop peu
+# pour qu'une courbe se lise encore comme une courbe.
+SERIES_DAYS = 22
 
 # Liquidité minimale : en dessous, le carnet est trop mince pour qu'une
 # lecture technique ait un sens, même sur des positions de 50 €.
@@ -483,6 +488,10 @@ def main() -> int:
     log(f"[{region.upper()}] séries de cours")
     attach_series(measured, frames)
 
+    today_utc = datetime.now(timezone.utc).date().isoformat()
+    last_session = (FRESHNESS["kept_last_dates"].most_common(1)
+                    or [(None, 0)])[0][0]
+
     snapshot = {
         "region": region,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -497,7 +506,14 @@ def main() -> int:
         # De quand datent réellement les cours. Une séance manquante ne se voit
         # pas en lisant les chiffres — elle se lit ici.
         "freshness": {
-            "last_session": (FRESHNESS["kept_last_dates"].most_common(1) or [(None, 0)])[0][0],
+            "last_session": last_session,
+            # Le snapshot tourne toutes les trois heures : certaines exécutions
+            # tombent marché ouvert et capturent une séance en cours, dont la
+            # clôture n'en est pas une. Le brief doit pouvoir le distinguer
+            # d'une séance close — sans quoi il lit un cours provisoire comme
+            # un cours de référence.
+            "snapshot_date_utc": today_utc,
+            "last_session_is_today": last_session == today_utc,
             "raw_last_dates": dict(FRESHNESS["raw_last_dates"].most_common(4)),
             "kept_last_dates": dict(FRESHNESS["kept_last_dates"].most_common(4)),
             "repaired_bars": FRESHNESS["repaired_bars"],

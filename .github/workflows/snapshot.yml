@@ -2,21 +2,21 @@ name: snapshot
 
 # Produit les instantanés de marché lus par les briefs Financial Watchtower.
 #
-# Les heures sont en UTC. Marge de 35 min avant chaque brief, pour absorber la
-# latence d'ordonnancement des runners GitHub (5 à 15 min aux heures de pointe).
+# Toutes les trois heures, et non à heure fixe avant chaque brief.
 #
-#                        heure d'été (UTC+2)   heure d'hiver (UTC+1)
-#   snapshot EU              04:55 UTC             05:55 UTC
-#   brief EU  (07h30 Paris)  05:30 UTC             06:30 UTC
-#   snapshot US              11:25 UTC             12:25 UTC
-#   brief US  (14h00 Paris)  12:00 UTC             13:00 UTC
+# Mesuré sur ce dépôt : les workflows planifiés GitHub partent avec 4 h 52 à
+# 6 h 37 de retard sur l'heure demandée. La file des schedules est à faible
+# priorité et peut même sauter un créneau. Viser une heure précise est donc
+# illusoire ; la parade est la fréquence — huit tentatives par jour, dont une
+# au moins aura produit un instantané récent avant chaque brief.
 #
-# ⚠️ À corriger au passage à l'heure d'hiver, le 25 octobre 2026.
+# Conséquence : plus d'heure d'été à corriger, et plus de découpage par région.
+# Chaque exécution produit les deux instantanés. Le brief lit le plus récent et
+# vérifie lui-même sa fraîcheur.
 
 on:
   schedule:
-    - cron: '55 4 * * 1-5'    # snapshot EU
-    - cron: '25 11 * * 1-5'   # snapshot US
+    - cron: '0 */3 * * *'
   workflow_dispatch:
     inputs:
       region:
@@ -50,12 +50,9 @@ jobs:
         run: pip install --quiet -r requirements.txt
       - name: Déterminer la région
         id: region
-        run: |
-          case "${{ github.event.schedule }}" in
-            '55 4 * * 1-5')  echo "value=eu" >> "$GITHUB_OUTPUT" ;;
-            '25 11 * * 1-5') echo "value=us" >> "$GITHUB_OUTPUT" ;;
-            *)               echo "value=${{ inputs.region || 'both' }}" >> "$GITHUB_OUTPUT" ;;
-          esac
+        # Une exécution planifiée produit les deux régions ; seul un
+        # déclenchement manuel peut en cibler une.
+        run: echo "value=${{ inputs.region || 'both' }}" >> "$GITHUB_OUTPUT"
 
       - name: Construire l'univers s'il manque
         run: |
