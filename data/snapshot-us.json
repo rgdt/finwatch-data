@@ -1,6 +1,6 @@
 {
  "region": "us",
- "generated_at": "2026-09-05T17:04:49+00:00",
+ "generated_at": "2026-09-05T19:42:48+00:00",
  "note": "Aucun filtrage appliqué. Tri par activity_score décroissant. Les critères de sélection vivent dans claude/screener.py, côté projet.",
  "fx_to_eur": {
   "EUR": 1.0,
