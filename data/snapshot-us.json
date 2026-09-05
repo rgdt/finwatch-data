@@ -1,6 +1,6 @@
 {
  "region": "us",
- "generated_at": "2026-09-05T07:13:27+00:00",
+ "generated_at": "2026-09-05T12:14:59+00:00",
  "note": "Aucun filtrage appliqué. Tri par activity_score décroissant. Les critères de sélection vivent dans claude/screener.py, côté projet.",
  "fx_to_eur": {
   "EUR": 1.0,
@@ -3330,12 +3330,12 @@
    "max_shares_50eur": 1,
    "capital_deployed_eur": 35.74,
    "activity_score": 28.212,
-   "name": "Standard Motor Products, Inc.",
+   "name": "SMP",
    "sector": null,
    "industry": null,
-   "market_cap": 927792320,
-   "exchange": "NYQ",
-   "next_earnings": "2026-10-30",
+   "market_cap": null,
+   "exchange": null,
+   "next_earnings": null,
    "series": {
     "dates": [
      "2026-04-29",
@@ -3548,12 +3548,12 @@
    "max_shares_50eur": 3,
    "capital_deployed_eur": 43.7,
    "activity_score": 27.915,
-   "name": "Mirion Technologies, Inc.",
-   "sector": "Industrials",
-   "industry": "Specialty Industrial Machinery",
-   "market_cap": 4216292096,
-   "exchange": "NYQ",
-   "next_earnings": "2026-10-27",
+   "name": "MIR",
+   "sector": null,
+   "industry": null,
+   "market_cap": null,
+   "exchange": null,
+   "next_earnings": null,
    "series": {
     "dates": [
      "2026-04-29",
@@ -3766,12 +3766,12 @@
    "max_shares_50eur": 1,
    "capital_deployed_eur": 47.44,
    "activity_score": 26.917,
-   "name": "The Vita Coco Company, Inc.",
-   "sector": "Consumer Defensive",
-   "industry": "Beverages - Non-Alcoholic",
-   "market_cap": 3190050816,
-   "exchange": "NMS",
-   "next_earnings": "2026-10-28",
+   "name": "COCO",
+   "sector": null,
+   "industry": null,
+   "market_cap": null,
+   "exchange": null,
+   "next_earnings": null,
    "series": {
     "dates": [
      "2026-04-29",
