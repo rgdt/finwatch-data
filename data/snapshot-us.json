@@ -1,6 +1,6 @@
 {
  "region": "us",
- "generated_at": "2026-09-06T01:44:26+00:00",
+ "generated_at": "2026-09-06T07:27:07+00:00",
  "note": "Aucun filtrage appliqué. Tri par activity_score décroissant. Les critères de sélection vivent dans claude/screener.py, côté projet.",
  "fx_to_eur": {
   "EUR": 1.0,
@@ -11,7 +11,7 @@
   "SEK": 0.089912,
   "DKK": 0.133795,
   "NOK": 0.092533,
-  "PLN": 0.23182
+  "PLN": 0.231857
  },
  "universe_size": 1506,
  "series_downloaded": 1500,
