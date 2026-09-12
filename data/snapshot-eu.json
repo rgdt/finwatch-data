@@ -1,10 +1,10 @@
 {
  "region": "eu",
- "generated_at": "2026-09-12T12:29:40+00:00",
+ "generated_at": "2026-09-12T17:31:15+00:00",
  "note": "Aucun filtrage appliqué. Tri par activity_score décroissant. Les critères de sélection vivent dans claude/screener.py, côté projet.",
  "fx_to_eur": {
   "EUR": 1.0,
-  "USD": 0.8619,
+  "USD": 0.862,
   "GBP": 1.16561,
   "GBp": 0.011656,
   "CHF": 1.056267,
@@ -59,7 +59,7 @@
    "name": "LANXESS Aktiengesellschaft",
    "sector": "Basic Materials",
    "industry": "Specialty Chemicals",
-   "market_cap": 1230434816,
+   "market_cap": null,
    "exchange": "GER",
    "next_earnings": "2026-11-05",
    "series": {
@@ -713,7 +713,7 @@
    "name": "PUMA SE",
    "sector": "Consumer Cyclical",
    "industry": "Footwear & Accessories",
-   "market_cap": 3192961280,
+   "market_cap": null,
    "exchange": "GER",
    "next_earnings": "2026-10-30",
    "series": {
@@ -1585,7 +1585,7 @@
    "name": "Frontline plc",
    "sector": "Energy",
    "industry": "Oil & Gas Midstream",
-   "market_cap": 102050332672,
+   "market_cap": null,
    "exchange": "OSL",
    "next_earnings": "2026-08-28",
    "series": {
@@ -2457,7 +2457,7 @@
    "name": "Prysmian S.p.A.",
    "sector": "Industrials",
    "industry": "Electrical Equipment & Parts",
-   "market_cap": 37188132864,
+   "market_cap": 37188722688,
    "exchange": "MIL",
    "next_earnings": "2026-10-29",
    "series": {
@@ -3111,7 +3111,7 @@
    "name": "Barco NV",
    "sector": "Technology",
    "industry": "Electronic Components",
-   "market_cap": 607970880,
+   "market_cap": null,
    "exchange": "BRU",
    "next_earnings": null,
    "series": {
@@ -4637,7 +4637,7 @@
    "name": "Wacker Chemie AG",
    "sector": "Basic Materials",
    "industry": "Specialty Chemicals",
-   "market_cap": 4359243264,
+   "market_cap": null,
    "exchange": "GER",
    "next_earnings": "2026-10-29",
    "series": {
@@ -9433,7 +9433,7 @@
    "name": "Thales S.A.",
    "sector": "Industrials",
    "industry": "Aerospace & Defense",
-   "market_cap": 46598561792,
+   "market_cap": 46656925696,
    "exchange": "PAR",
    "next_earnings": "2026-07-23",
    "series": {
@@ -11613,7 +11613,7 @@
    "name": "Poste Italiane S.p.A.",
    "sector": "Industrials",
    "industry": "Integrated Freight & Logistics",
-   "market_cap": 33665013760,
+   "market_cap": 33653258240,
    "exchange": "MIL",
    "next_earnings": "2026-11-12",
    "series": {
@@ -12485,9 +12485,9 @@
    "name": "Publicis Groupe S.A.",
    "sector": "Communication Services",
    "industry": "Advertising Agencies",
-   "market_cap": 24173000704,
+   "market_cap": null,
    "exchange": "PAR",
-   "next_earnings": "2026-07-16",
+   "next_earnings": null,
    "series": {
     "dates": [
      "2026-05-08",
@@ -15101,7 +15101,7 @@
    "name": "BASF SE",
    "sector": "Basic Materials",
    "industry": "Chemicals",
-   "market_cap": 45834579968,
+   "market_cap": 44621586432,
    "exchange": "GER",
    "next_earnings": "2026-10-28",
    "series": {
@@ -15537,7 +15537,7 @@
    "name": "Beiersdorf Aktiengesellschaft",
    "sector": "Consumer Defensive",
    "industry": "Household & Personal Products",
-   "market_cap": 16022162432,
+   "market_cap": 15989083136,
    "exchange": "GER",
    "next_earnings": "2026-10-27",
    "series": {
