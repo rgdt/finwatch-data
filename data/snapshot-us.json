@@ -1,6 +1,6 @@
 {
  "region": "us",
- "generated_at": "2026-09-13T01:51:51+00:00",
+ "generated_at": "2026-09-13T07:46:51+00:00",
  "note": "Aucun filtrage appliqué. Tri par activity_score décroissant. Les critères de sélection vivent dans claude/screener.py, côté projet.",
  "fx_to_eur": {
   "EUR": 1.0,
@@ -8,8 +8,8 @@
   "GBP": 1.16561,
   "GBp": 0.011656,
   "CHF": 1.056267,
-  "SEK": 0.088932,
-  "DKK": 0.133788,
+  "SEK": 0.088941,
+  "DKK": 0.133784,
   "NOK": 0.092868,
   "PLN": 0.231417
  },
