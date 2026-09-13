@@ -1,17 +1,17 @@
 {
  "region": "us",
- "generated_at": "2026-09-13T17:49:48+00:00",
+ "generated_at": "2026-09-13T20:00:56+00:00",
  "note": "Aucun filtrage appliqué. Tri par activity_score décroissant. Les critères de sélection vivent dans claude/screener.py, côté projet.",
  "fx_to_eur": {
   "EUR": 1.0,
   "USD": 0.862,
-  "GBP": 1.16561,
-  "GBp": 0.011656,
-  "CHF": 1.056267,
-  "SEK": 0.088941,
-  "DKK": 0.133784,
-  "NOK": 0.092868,
-  "PLN": 0.231417
+  "GBP": 1.166997,
+  "GBp": 0.01167,
+  "CHF": 1.056703,
+  "SEK": 0.088956,
+  "DKK": 0.133787,
+  "NOK": 0.092954,
+  "PLN": 0.231493
  },
  "universe_size": 1506,
  "series_downloaded": 1501,
@@ -63,7 +63,7 @@
    "name": "Arcus Biosciences, Inc.",
    "sector": "Healthcare",
    "industry": "Biotechnology",
-   "market_cap": 3131127808,
+   "market_cap": 3092762112,
    "exchange": "NYQ",
    "next_earnings": "2026-10-27",
    "series": {
@@ -717,7 +717,7 @@
    "name": "Skyworks Solutions, Inc.",
    "sector": "Technology",
    "industry": "Semiconductors",
-   "market_cap": 13288367104,
+   "market_cap": 13294270464,
    "exchange": "NMS",
    "next_earnings": "2026-11-03",
    "series": {
@@ -935,7 +935,7 @@
    "name": "Qorvo, Inc.",
    "sector": "Technology",
    "industry": "Semiconductors",
-   "market_cap": 10290630656,
+   "market_cap": 10291053568,
    "exchange": "NMS",
    "next_earnings": "2026-11-09",
    "series": {
@@ -2679,7 +2679,7 @@
    "name": "Qualys, Inc.",
    "sector": "Technology",
    "industry": "Software - Infrastructure",
-   "market_cap": 5292411904,
+   "market_cap": 5198936576,
    "exchange": "NMS",
    "next_earnings": "2026-11-03",
    "series": {
@@ -3769,7 +3769,7 @@
    "name": "Copart, Inc.",
    "sector": "Industrials",
    "industry": "Specialty Business Services",
-   "market_cap": 28851087360,
+   "market_cap": 27728054272,
    "exchange": "NMS",
    "next_earnings": "2026-11-19",
    "series": {
@@ -5077,7 +5077,7 @@
    "name": "Kimberly-Clark Corporation",
    "sector": "Consumer Defensive",
    "industry": "Household & Personal Products",
-   "market_cap": 32579946496,
+   "market_cap": 32642633728,
    "exchange": "NMS",
    "next_earnings": "2026-11-03",
    "series": {
@@ -12271,7 +12271,7 @@
    "name": "SharkNinja, Inc.",
    "sector": "Consumer Cyclical",
    "industry": "Furnishings, Fixtures & Appliances",
-   "market_cap": 22652145664,
+   "market_cap": 22756478976,
    "exchange": "NYQ",
    "next_earnings": "2026-11-05",
    "series": {
@@ -13579,7 +13579,7 @@
    "name": "Graphic Packaging Holding Company",
    "sector": "Consumer Cyclical",
    "industry": "Packaging & Containers",
-   "market_cap": 2810930176,
+   "market_cap": 2812679936,
    "exchange": "NYQ",
    "next_earnings": "2026-11-09",
    "series": {
@@ -13797,7 +13797,7 @@
    "name": "Sonoco Products Company",
    "sector": "Consumer Cyclical",
    "industry": "Packaging & Containers",
-   "market_cap": 4729878016,
+   "market_cap": 4730180096,
    "exchange": "NYQ",
    "next_earnings": "2026-10-29",
    "series": {
@@ -16195,7 +16195,7 @@
    "name": "TransMedics Group, Inc.",
    "sector": "Healthcare",
    "industry": "Medical Devices",
-   "market_cap": 2840215808,
+   "market_cap": 2849603328,
    "exchange": "NGM",
    "next_earnings": "2026-10-29",
    "series": {
@@ -17285,7 +17285,7 @@
    "name": "FormFactor, Inc.",
    "sector": "Technology",
    "industry": "Semiconductor Equipment & Materials",
-   "market_cap": 8960900096,
+   "market_cap": 8979977216,
    "exchange": "NMS",
    "next_earnings": "2026-10-28",
    "series": {
