@@ -1,17 +1,17 @@
 {
  "region": "us",
- "generated_at": "2026-09-15T02:17:20+00:00",
+ "generated_at": "2026-09-15T08:10:58+00:00",
  "note": "Aucun filtrage appliqué. Tri par activity_score décroissant. Les critères de sélection vivent dans claude/screener.py, côté projet.",
  "fx_to_eur": {
   "EUR": 1.0,
   "USD": 0.8665,
-  "GBP": 1.168921,
-  "GBp": 0.011689,
-  "CHF": 1.059479,
-  "SEK": 0.08871,
-  "DKK": 0.133778,
-  "NOK": 0.0929,
-  "PLN": 0.23042
+  "GBP": 1.167638,
+  "GBp": 0.011676,
+  "CHF": 1.06076,
+  "SEK": 0.088601,
+  "DKK": 0.133776,
+  "NOK": 0.092736,
+  "PLN": 0.230217
  },
  "universe_size": 1506,
  "series_downloaded": 1501,
@@ -22,9 +22,8 @@
   "snapshot_date_utc": "2026-09-15",
   "last_session_is_today": false,
   "raw_last_dates": {
-   "2026-09-14": 1502,
+   "2026-09-14": 1503,
    "2026-09-01": 1,
-   "2026-09-11": 1,
    "2026-08-27": 1
   },
   "kept_last_dates": {
@@ -35,7 +34,7 @@
   },
   "repaired_bars": 0,
   "dropped_last_rows": {
-   "Close": 4
+   "Close": 5
   }
  },
  "instruments": [
