@@ -1,6 +1,6 @@
 {
  "region": "us",
- "generated_at": "2026-09-19T22:36:56+00:00",
+ "generated_at": "2026-09-20T02:07:53+00:00",
  "note": "Aucun filtrage appliqué. Tri par activity_score décroissant. Les critères de sélection vivent dans claude/screener.py, côté projet.",
  "fx_to_eur": {
   "EUR": 1.0,
@@ -19,7 +19,7 @@
  "context_count": 80,
  "freshness": {
   "last_session": "2026-09-18",
-  "snapshot_date_utc": "2026-09-19",
+  "snapshot_date_utc": "2026-09-20",
   "last_session_is_today": false,
   "raw_last_dates": {
    "2026-09-18": 1503,
@@ -11158,12 +11158,12 @@
    "max_shares_50eur": 1,
    "capital_deployed_eur": 37.29,
    "activity_score": 46.043,
-   "name": "BLKB",
+   "name": "Blackbaud, Inc.",
    "sector": null,
    "industry": null,
-   "market_cap": null,
-   "exchange": null,
-   "next_earnings": null,
+   "market_cap": 1944965504,
+   "exchange": "NMS",
+   "next_earnings": "2026-10-28",
    "series": {
     "dates": [
      "2026-05-12",
@@ -11376,12 +11376,12 @@
    "max_shares_50eur": 4,
    "capital_deployed_eur": 48.46,
    "activity_score": 45.545,
-   "name": "TTD",
-   "sector": null,
-   "industry": null,
-   "market_cap": null,
-   "exchange": null,
-   "next_earnings": null,
+   "name": "The Trade Desk, Inc.",
+   "sector": "Communication Services",
+   "industry": "Advertising Agencies",
+   "market_cap": 6581307904,
+   "exchange": "NGM",
+   "next_earnings": "2026-11-05",
    "series": {
     "dates": [
      "2026-05-12",
@@ -11594,12 +11594,12 @@
    "max_shares_50eur": 1,
    "capital_deployed_eur": 33.95,
    "activity_score": 44.888,
-   "name": "CENX",
-   "sector": null,
-   "industry": null,
-   "market_cap": null,
-   "exchange": null,
-   "next_earnings": null,
+   "name": "Century Aluminum Company",
+   "sector": "Basic Materials",
+   "industry": "Aluminum",
+   "market_cap": 3861728256,
+   "exchange": "NMS",
+   "next_earnings": "2026-11-05",
    "series": {
     "dates": [
      "2026-05-12",
@@ -11812,12 +11812,12 @@
    "max_shares_50eur": 13,
    "capital_deployed_eur": 48.42,
    "activity_score": 44.338,
-   "name": "ABR",
-   "sector": null,
-   "industry": null,
-   "market_cap": null,
-   "exchange": null,
-   "next_earnings": null,
+   "name": "Arbor Realty Trust, Inc.",
+   "sector": "Real Estate",
+   "industry": "REIT - Mortgage",
+   "market_cap": 867676992,
+   "exchange": "NYQ",
+   "next_earnings": "2026-10-30",
    "series": {
     "dates": [
      "2026-05-12",
@@ -12030,12 +12030,12 @@
    "max_shares_50eur": 1,
    "capital_deployed_eur": 40.29,
    "activity_score": 44.31,
-   "name": "OII",
-   "sector": null,
-   "industry": null,
-   "market_cap": null,
-   "exchange": null,
-   "next_earnings": null,
+   "name": "Oceaneering International, Inc.",
+   "sector": "Energy",
+   "industry": "Oil & Gas Equipment & Services",
+   "market_cap": 4607227392,
+   "exchange": "NYQ",
+   "next_earnings": "2026-10-21",
    "series": {
     "dates": [
      "2026-05-12",
@@ -12249,9 +12249,9 @@
    "capital_deployed_eur": 46.58,
    "activity_score": 43.993,
    "name": "Valvoline Inc.",
-   "sector": null,
-   "industry": null,
-   "market_cap": 3414576128,
+   "sector": "Consumer Cyclical",
+   "industry": "Auto & Truck Dealerships",
+   "market_cap": 3412865536,
    "exchange": "NYQ",
    "next_earnings": "2026-11-18",
    "series": {
@@ -13123,7 +13123,7 @@
    "name": "Paramount Skydance Corporation",
    "sector": "Communication Services",
    "industry": "Entertainment",
-   "market_cap": 11426757632,
+   "market_cap": 11455066112,
    "exchange": "NMS",
    "next_earnings": "2026-11-09",
    "series": {
@@ -13777,7 +13777,7 @@
    "name": "Callaway Golf Company",
    "sector": "Consumer Cyclical",
    "industry": "Leisure",
-   "market_cap": 2640638720,
+   "market_cap": 2622319616,
    "exchange": "NYQ",
    "next_earnings": "2026-11-05",
    "series": {
@@ -14431,7 +14431,7 @@
    "name": "DigitalOcean Holdings, Inc.",
    "sector": "Technology",
    "industry": "Software - Infrastructure",
-   "market_cap": 15214419968,
+   "market_cap": 15301803008,
    "exchange": "NYQ",
    "next_earnings": "2026-11-04",
    "series": {
@@ -16393,7 +16393,7 @@
    "name": "J.B. Hunt Transport Services, Inc.",
    "sector": "Industrials",
    "industry": "Integrated Freight & Logistics",
-   "market_cap": 21996075008,
+   "market_cap": 21999572992,
    "exchange": "NMS",
    "next_earnings": "2026-10-15",
    "series": {
@@ -17265,7 +17265,7 @@
    "name": "Omnicom Group Inc.",
    "sector": "Communication Services",
    "industry": "Advertising Agencies",
-   "market_cap": 21822924800,
+   "market_cap": 21006669824,
    "exchange": "NYQ",
    "next_earnings": "2026-10-20",
    "series": {
