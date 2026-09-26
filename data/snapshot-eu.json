@@ -1,6 +1,6 @@
 {
  "region": "eu",
- "generated_at": "2026-09-25T23:41:28+00:00",
+ "generated_at": "2026-09-26T02:21:08+00:00",
  "note": "Aucun filtrage appliqué. Tri par activity_score décroissant. Les critères de sélection vivent dans claude/screener.py, côté projet.",
  "fx_to_eur": {
   "EUR": 1.0,
@@ -19,7 +19,7 @@
  "context_count": 80,
  "freshness": {
   "last_session": "2026-09-24",
-  "snapshot_date_utc": "2026-09-25",
+  "snapshot_date_utc": "2026-09-26",
   "last_session_is_today": false,
   "raw_last_dates": {
    "2026-09-25": 293,
@@ -11835,7 +11835,7 @@
    "name": "Kering SA",
    "sector": "Consumer Cyclical",
    "industry": "Luxury Goods",
-   "market_cap": 27386810368,
+   "market_cap": 27386755072,
    "exchange": "PAR",
    "next_earnings": "2026-07-28",
    "series": {
